@@ -2,7 +2,7 @@
 
 一个官网项目，目录结构是这样的：  
 
-![目录结构]('https://github.com/cllee1214/blog/blob/master/images/1.png)
+![目录结构](https://github.com/cllee1214/blog/blob/master/images/1.png)
 
 启动项目:  `supervisor sever.js`
 
