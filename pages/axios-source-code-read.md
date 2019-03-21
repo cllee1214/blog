@@ -38,3 +38,28 @@
    2个大点：
    1. 加入了promise
    2. 这里涉及到axios的拦截器订阅的回调是如何加入promise的
+
+   这里有一个回调函数链chain（实际上就是一个数组）（513行），结构有几个特点：一是函数都是以成对出现的，且前面一个是成功回调，后一个是失败回调（从关于拦截器第二点得来），如果没有的话则undifined。二是这个链分三部分,依次是请求拦截回调、发出请求、响应拦截回调。
+
+  再看Promise.resolve(config)。由于config就只是一个普通对象，Promise.resolve在这里就是立即返还一个promise对象。实际上就是：
+  `
+   new Promise(function(resolve){
+     resolve(config)
+   })
+   `
+
+  想象中此promise对象后面会带有非常多的then方法，那么如何将这些拦截器回调作为参数传进去呢？
+
+  (```)
+  while (chain.length) {
+	    promise = promise.then(chain.shift(), chain.shift());
+	  };
+  (```)
+
+  需要了解的知识点是promise每次都会返回一个promise对象。那么这里的promise每次都会被上次的promis对象覆盖。
+  这里每次都两个为一组从chain上拆下来作为参数传到then里面。为什么是两个？因为then的参数也是两个，分别对应fulfilled和rejected。且从上文分析chain也是这样的成对结构。
+  整个过程就是：每次都返回一个promise，每次都在这个promise的then中加入回调，然后再返回一个promise,再在当前这个promise中加入回调。。循环这个过程，直到所有回调被添加完为止。
+
+  看发出请求部分，即dispatchRequest
+
+  
