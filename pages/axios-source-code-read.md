@@ -60,6 +60,10 @@
   这里每次都两个为一组从chain上拆下来作为参数传到then里面。为什么是两个？因为then的参数也是两个，分别对应fulfilled和rejected。且从上文分析chain也是这样的成对结构。
   整个过程就是：每次都返回一个promise，每次都在这个promise的then中加入回调，然后再返回一个promise,再在当前这个promise中加入回调。。循环这个过程，直到所有回调被添加完为止。
 
-  看发出请求部分，即dispatchRequest
+  看发出请求部分，即dispatchRequest：
+  函数内部一大部分都是在做请求之前的参数处理，如处理请求地址、处理请求头、需要请求的数据参数等等。
+  这里的重点在于adapter。
+  简单的说，这个adapter才是真正处理请求地方。如果剔除其他一些细枝末节的东西，其实就是一个原生 promise + 原生ajax的 组合。即readyState为4且status为200执行resolve，其他的如error,timeout执行reject。
+
 
   
