@@ -8,6 +8,7 @@
 ## 一些概念
 
 * [关于BFC](https://segmentfault.com/a/1190000003807397)
+* [flex-shrink的工作机制](./pages/about-flex.md)
 
 ## 源码笔记
 
